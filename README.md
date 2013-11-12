@@ -34,7 +34,6 @@ How neat is that?!!!
 Features above and beyond the official LEGO kernel include:
 
 - Support for Atheros, Realtek, and other wifi chipsets so you're not stuck with one specific wifi dongle
-- Support for ssh terminal sessions instead of plain old (insecure) telnet
 - Actual user accounts instead of passwordless root access
 - Fully upgradeable and customizable install using standard "apt" tools, running on the brick
 - NFS and Samba file share capability
