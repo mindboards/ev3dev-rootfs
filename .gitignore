@@ -1,6 +1,8 @@
 #
 ev3dev.img
 
+*.gz
+
 #
 # Top-level folders
 #
