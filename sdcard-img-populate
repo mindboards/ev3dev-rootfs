@@ -72,7 +72,7 @@ eval mount "/dev/mapper/loop?-ev3dev-1" "./ev3dev-fat32"
 eval mount "/dev/mapper/loop?-ev3dev-2" "./ev3dev-ext3"
 
 echo    "-------------------------------------------------------------------------------"
-echo -n "   Copying the uImage and ev3dev.rc.local script to the fat32 partition ... "
+echo -n "   Copying uImage and ev3dev.rc.local to the fat32 partition ... "
 
 cp -dR rootfs-updates/boot_part/* ev3dev-fat32
 
@@ -103,6 +103,24 @@ echo    "-----------------------------------------------------------------------
 echo -n "   Creating mount point directories in /media ... "
 
 mkdir ev3dev-ext3/media/mmc_p1
+
+echo    "done."
+
+echo    "-------------------------------------------------------------------------------"
+echo -n "   Filling unused sectors on FAT32 partition with zeros ... "
+
+dd if=/dev/zero of=ev3dev-fat32/zero.fill > /dev/null 2>&1
+sleep 3
+rm ev3dev-fat32/zero.fill
+
+echo    "done."
+
+echo    "-------------------------------------------------------------------------------"
+echo -n "   Filling unused sectors on ext3 partition with zeros ... "
+
+dd if=/dev/zero of=ev3dev-ext3/zero.fill > /dev/null 2>&1
+sleep 3
+rm ev3dev-ext3/zero.fill
 
 echo    "done."
 

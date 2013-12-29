@@ -134,11 +134,11 @@ if [ -d ${TARGET_ROOTFS_DIR} ]; then
         echo
 
         echo -n "   Deleting cached entries from /var/lib/apt/lists ... "
-        rm `find ${TARGET_ROOTFS_DIR}/var/lib/apt/lists -maxdepth 1 -type f -not -name "lock"`
+        rm `find ${TARGET_ROOTFS_DIR}/var/lib/apt/lists -maxdepth 1 -type f -not -name "lock"` > /dev/null 2>&1
         echo "done."
 
         echo -n "   Deleting package lists... "
-        rm "${TARGET_ROOTFS_DIR}/var/cache/apt/*.bin"
+        rm  ${TARGET_ROOTFS_DIR}/var/cache/apt/*.bin > /dev/null 2>&1
         echo "done."
     fi
 fi
