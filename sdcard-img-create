@@ -37,7 +37,11 @@ fi
 if [ ! -e ev3dev.img ] || [ -e ev3dev.img ] && [ "${YesNo}" = "Yes" ]; then
     echo    "-------------------------------------------------------------------------------"
     echo -n "   Creating a blank ev3dev.img file - should only take a few seconds ... "
-    dd bs=512 if=/dev/zero of=ev3dev.img count=1M > /dev/null 2>&1 
+    if ! type "fallocate" > /dev/null; then
+        dd bs=512 if=/dev/zero of=ev3dev.img count=1M > /dev/null 2>&1
+    else
+        fallocate -l $((512*1024*1024)) ev3dev.img
+    fi
     echo    "done."
 fi
 
