@@ -11,7 +11,7 @@ ev3dev-rootfs
 These are the scripts used to compile the ev3dev kernel and build the root
 file system.
 
-Scirpts
+Scripts
 -------
 
 ```build-kernel```               Used to build the kernel.
@@ -74,6 +74,25 @@ First time kernel build
         ~/work/build-kernel-output $ sudo cp -r lib/ <path-to-file-system-partition>
 
 
+Faster Builds and Custom Locations
+----------------------------------
 
+By default the locations of the kernel source tree and the toolchain used
+to build the kernel are expected to be in certain directories relative to
+the ev3dev-rootfs repo directory.
 
+You can override these locations by creating a file called ```local-env```
+in the ev3dev-rootfs directory or ```~/.ev3dev-env``` (in your home directory).
+It should look like this:
+
+    #!/bin/bash
+    
+    export AM1808_MAKE_ARGS=-j4
+    
+    # override any AM1808_* variables from setup-env script.
+    #export AM1808_XXX=/custom/path
+
+The ```--j4``` is for faster builds. It allows make to compile files in
+in parallel. You should replace 4 with the number of processor cores that
+you want to devote to building the kernel.
 

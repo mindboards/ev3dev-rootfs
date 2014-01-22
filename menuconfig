@@ -3,8 +3,5 @@
 # menuconfig - Runs make menuconfig
 # ------------------------------------------------------------------------------
 
-project=`pwd`
-cd "../ev3dev-kernel" || exit $?
-make ARCH=arm menuconfig
-
+./build-kernel menuconfig || exit $?
 
