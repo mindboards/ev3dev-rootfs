@@ -85,14 +85,14 @@ You can override these locations by creating a file called ```local-env```
 in the ev3dev-rootfs directory or ```~/.ev3dev-env``` (in your home directory).
 It should look like this:
 
-    #!/bin/bash
+    #!/bin/sh
     
     export AM1808_MAKE_ARGS=-j4
     
     # override any AM1808_* variables from setup-env script.
     #export AM1808_XXX=/custom/path
 
-The ```--j4``` is for faster builds. It allows make to compile files in
+The ```-j4``` is for faster builds. It allows make to compile files in
 in parallel. You should replace 4 with the number of processor cores that
 you want to devote to building the kernel.
 
