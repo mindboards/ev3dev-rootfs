@@ -1,0 +1,11 @@
+#!/bin/sh
+# ------------------------------------------------------------------------------
+# update-defconfig - Updates the ev3dev_defconfig file based on the current
+#                    configuration.
+# ------------------------------------------------------------------------------
+
+kernel_path="../ev3dev-kernel"
+make -C ${kernel_path} savedefconfig ARCH=arm || exit $?
+mv ${kernel_path}/defconfig ${kernel_path}/arch/arm/configs/ev3dev_defconfig
+
+

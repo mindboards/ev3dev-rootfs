@@ -1,18 +1,2 @@
-#
-ev3dev.img
-
-*.gz
-
-#
-# Top-level folders
-#
-/ev3dev-ext3
-/ev3dev-fat32
-/ev3-rootfs
-/rootfs-updates
-
-#
-# git files that we don't want to ignore even it they are dot-files
-#
-!.gitignore
-
+kernel/
+ev3-rootfs/
