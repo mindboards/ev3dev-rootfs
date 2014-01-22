@@ -20,7 +20,7 @@ fi
 if [ $# -eq 0 ]
 then
 	echo "CROSS COMPILING KERNEL"
-	make -C ${kernel_path} -j4 uImage ARCH=arm || exit $?
+	make -C ${kernel_path} -j4 uImage modules ARCH=arm || exit $?
 
 	if [ ! -d "kernel" ]
 	then
