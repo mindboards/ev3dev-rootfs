@@ -10,32 +10,41 @@ echo ---------------------------------------------------------------------------
 echo
 
 kernel_path="../ev3dev-kernel"
+obj_path="../obj"
+install_path="../build-kernel-output"
+make_args="-j4 -C ${kernel_path} KBUILD_OUTPUT=${obj_path} ARCH=arm"
+
+if [ ! -d "${obj_path}" ]
+then
+	echo "CREATING OBJ DIRECTORY"
+	mkdir -p "${obj_path}" || exit $?
+fi
 
 if [ ! -f "${kernel_path}/.config" ]
 then
 	echo "LOADING DEFAULT KERNEL CONFIGURATION"
-	make -C ${kernel_path} defconfig ARCH=arm KBUILD_DEFCONFIG=ev3dev_defconfig || exit $?
+	make ${make_args} defconfig KBUILD_DEFCONFIG=ev3dev_defconfig || exit $?
 fi
 
 if [ $# -eq 0 ]
 then
 	echo "CROSS COMPILING KERNEL"
-	make -C ${kernel_path} -j4 uImage modules ARCH=arm || exit $?
+	make ${make_args} uImage  modules|| exit $?
 
-	if [ ! -d "kernel" ]
+	if [ ! -d "${install_path}" ]
 	then
 		echo "CREATING OUTPUT DIRECTORY"
-		mkdir -p kernel || exit $?
+		mkdir -p "${install_path}" || exit $?
 	fi
 
 	echo "COPYING BOOTABLE IMAGE TO LOCAL DIRECTORY"
-	cp ${kernel_path}/arch/arm/boot/uImage kernel/uImage || exit $?
+	cp ${obj_path}/arch/arm/boot/uImage ${install_path} || exit $?
 
 	echo "COPYING MODULES TO LOCAL DIRECTORY"
-	make -C ${kernel_path} modules_install ARCH=arm INSTALL_MOD_PATH=kernel || exit $?
+	make ${make_args} modules_install INSTALL_MOD_PATH=${install_path}/ || exit $?
 else
 	echo "CROSS COMPILING KERNEL"
-	make -C ${kernel_path} $@ ARCH=arm || exit $?
+	make ${make_args} $@ || exit $?
 
 	for arg in "$@"
 	do

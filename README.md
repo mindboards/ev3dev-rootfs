@@ -54,7 +54,7 @@ First time kernel build
         LICENSE                     sdcard-img-create
 
 
-5.  Now we need to install the required tool. That is the
+5.  Now we need to install the required tool. TO do this, just run the
     ```install-kernel-build-tools``` script. (You only need to run this once.)
 
         ~/work/ev3dev-rootfs $ ./install-kernel-build-tools
@@ -64,11 +64,13 @@ First time kernel build
 
         ~/work/ev3dev-rootfs $ ./build_kernel
 
-7.  That's it! Now you just need to copy the files in ```kernel``` to your
+7.  That's it! The uImage and kernel modules you just built are saved in
+    ``../build-kernel-output```. You just need to copy the files to your
     already formatted SD card.
 
-        ~/work/ev3dev-rootfs $ cp kernel/uImage <path-to-boot-partition>/uImage
-        ~/work/ev3dev-rootfs $ sudo cp -r kernel/lib/ <path-to-file-system-partition>
+        ~/work/ev3dev-rootfs $ cd ../build-kernel-output
+        ~/work/build-kernel-output $ cp uImage <path-to-boot-partition>/uImage
+        ~/work/build-kernel-output $ sudo cp -r lib/ <path-to-file-system-partition>
 
 
 
