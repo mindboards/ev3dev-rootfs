@@ -30,7 +30,8 @@ First time kernel build
 -----------------------
 
 1.  Create a working directory somewhere. For this tutorial, we are using
-    ```~/work```.
+    ```~/work```. The build scripts will generate extra subdirectories here
+    so we suggest creating a new directory instead of using an existing one.
 
         ~ $ mkdir work
         ~ $ cd work
