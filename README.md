@@ -1,5 +1,3 @@
-This repository contains the build scripts for ev3dev.
-
 If you just want to use ev3dev, please see the
 [main ev3dev repository](https://github.com/mindboards/ev3dev).
 
@@ -68,9 +66,9 @@ First time kernel build
 
 6.  Create a ```local-env``` to make use of all of your processing power. See the
     [Faster Builds and Custom Locations](#faster-builds-and-custom-locations)
-    section below.
+    section below for more about this file.
 
-        ~/work/ev3dev-rootfs $ echo " #!/bin/sh
+        ~/work/ev3dev-rootfs $ echo "#!/bin/sh
         
         export AM1808_MAKE_ARGS=-j4" > local-env
 
