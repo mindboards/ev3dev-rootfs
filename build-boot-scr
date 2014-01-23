@@ -1,0 +1,6 @@
+#!/bin/sh
+
+source ./setup-env
+
+mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "ev3dev" -d boot.cmd $AM1808_INSTALL/boot.scr
+
