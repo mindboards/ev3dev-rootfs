@@ -11,6 +11,11 @@ ev3dev-rootfs
 These are the scripts used to compile the ev3dev kernel and build the root
 file system.
 
+System Requirements
+-------------------
+* Debian or derivative OS (Ubuntu, Mint, etc.)
+* User account with ```sudo``` enabled
+
 Scripts
 -------
 
@@ -29,20 +34,21 @@ Scripts
 First time kernel build
 -----------------------
 
-1.  Create a working directory somewhere. For this tutorial, we are using
+1.  If you don't have ```git``` already, then we need to install it.
+
+        ~ $ sudo apt-get install git
+
+2.  Create a working directory somewhere. For this tutorial, we are using
     ```~/work```. The build scripts will generate extra subdirectories here
     so we suggest creating a new directory instead of using an existing one.
 
         ~ $ mkdir work
         ~ $ cd work
 
-2.  Clone the kernel and root file system repos.
+3.  Clone the kernel and root file system repos.
 
         ~/work $ git clone git://github.com/mindboards/ev3dev-kernel
         ~/work $ git clone git://github.com/mindboards/ev3dev-rootfs
-
-3.  Find something to do while the kernel is cloning. It is 15 million lines
-    of code!
 
 4.  Change to the ```ev3dev-rootfs``` director and have a look around.
 
@@ -60,12 +66,18 @@ First time kernel build
 
         ~/work/ev3dev-rootfs $ ./install-kernel-build-tools
 
-6.  Now find something else to do again because we are about to compile
-    the kernel.
+6.  Create a ```local-env``` to make use of all of your processing power.
+    See [[#Faster Builds and Custom Locations]] section below.
+
+        ~/work/ev3dev-rootfs $ echo " #!/bin/sh
+        
+        export AM1808_MAKE_ARGS=-j4" > local-env
+
+7.  Now we can compile the kernel.
 
         ~/work/ev3dev-rootfs $ ./build_kernel
 
-7.  That's it! The uImage and kernel modules you just built are saved in
+8.  That's it! The uImage and kernel modules you just built are saved in
     ``../dist```. You just need to copy the files to your
     already formatted SD card.
 
