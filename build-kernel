@@ -9,7 +9,7 @@ echo BUILDING KERNEL
 echo -------------------------------------------------------------------------------
 echo
 
-source ./setup-env
+. ./setup-env
 
 kernel_src_path="$AM1808_KERNEL"
 obj_path="$AM1808_OBJ"

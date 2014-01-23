@@ -11,7 +11,7 @@
 #
 # This file is normally source'd from within the actual build script using:
 #
-# source ./setup-env
+# . ./setup-env
 #
 # Note that the variables prefixed with LEGO_ are only there to make it 
 # easier to switch to building the stock LEGO image, which I did at the 
@@ -52,13 +52,13 @@ export AM1808_INSTALL="${AM1808_DISTRO}/dist"
 #export X86_KERNEL=/lib/modules/$(uname -r)/build
 #export X86_MODULES=~/projects/lms2012/lms2012/Linux_X86/sys/mod
 
-if [ -f "~/.ev3dev-env" ]
+if [ -f ~/.ev3dev-env ]
 then
-	source ~/.ev3dev-env
+	. ~/.ev3dev-env
 fi
 
-if [ -f "local-env" ]
+if [ -f local-env ]
 then
-	source ./local-env
+	. ./local-env
 fi
 
