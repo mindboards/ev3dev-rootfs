@@ -66,8 +66,9 @@ First time kernel build
 
         ~/work/ev3dev-rootfs $ ./install-kernel-build-tools
 
-6.  Create a ```local-env``` to make use of all of your processing power.
-    See [[#Faster Builds and Custom Locations]] section below.
+6.  Create a ```local-env``` to make use of all of your processing power. See the
+    [Faster Builds and Custom Locations](#faster-builds-and-custom-locations)
+    section below.
 
         ~/work/ev3dev-rootfs $ echo " #!/bin/sh
         
