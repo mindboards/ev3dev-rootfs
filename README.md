@@ -66,12 +66,12 @@ First time kernel build
         ~/work/ev3dev-rootfs $ ./build_kernel
 
 7.  That's it! The uImage and kernel modules you just built are saved in
-    ``../build-kernel-output```. You just need to copy the files to your
+    ``../dist```. You just need to copy the files to your
     already formatted SD card.
 
-        ~/work/ev3dev-rootfs $ cd ../build-kernel-output
-        ~/work/build-kernel-output $ cp uImage <path-to-boot-partition>/uImage
-        ~/work/build-kernel-output $ sudo cp -r lib/ <path-to-file-system-partition>
+        ~/work/ev3dev-rootfs $ cd ../dist
+        ~/work/dist $ cp uImage <path-to-boot-partition>/uImage
+        ~/work/dist $ sudo cp -r lib/ <path-to-file-system-partition>
 
 
 Faster Builds and Custom Locations
