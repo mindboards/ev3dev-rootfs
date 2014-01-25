@@ -1,0 +1,110 @@
+#!/bin/sh
+# ------------------------------------------------------------------------------
+# defconfig - Manages the ev3dev_defconfig file in the kernel tree.
+# ------------------------------------------------------------------------------
+
+. ./setup-env
+kernel_src_path="$AM1808_KERNEL"
+obj_path="$AM1808_OBJ"
+make_args="$AM1808_MAKE_ARGS -C ${kernel_src_path} KBUILD_OUTPUT=${obj_path} \
+ARCH=arm CROSS_COMPILE=$AM1808_COMPILER/$AM1808_ABI"
+
+show_usage ()
+{
+	echo "Usage: ./defconfig load | merge | update [-i]"
+	echo
+	echo "COMMANDS"
+	echo "--------"
+	echo "load     Replaces the current kernel configuration with the configuration"
+	echo "         specified ev3dev_defconfig. WARNING: You will lose any changes"
+	echo "         that you made to the local kernel configuration."
+	echo
+	echo "merge    Calls a merge tool to merges the contents of ev3dev_defconfig"
+	echo "         into the current kernel configuration"
+	echo
+	echo "update   Replaces arch/arm/configs/ev3dev_defconfig with the current"
+	echo "         kernel configuration"
+	echo
+	echo "OPTIONS"
+	echo "-------"
+	echo "-i       When used with the update command, a merge tool will be called"
+	echo "         to merge the current kernel configuration with ev3dev_defconfig"
+	echo
+	echo "REMARKS"
+	echo "-------"
+	echo "ev3dev_defconfig is located at arch/arm/configs/ev3dev_defconfig in the"
+	echo "kernel tree. The current configuration is located at ../obj/.config"
+	echo "unless you have overridden the object directory in ./local-env."
+	echo
+	echo "The merge tool is specified by the EV3DEV_MERGE_CMD environment variable."
+	echo "You can override this in ./local-env."
+}
+
+check_for_local_config()
+{
+	if [ ! -f ${obj_path}/.config ]
+	then
+		echo "There is no local kernel configuration at ${obj_path}/.config"
+		exit 1
+	fi
+}
+
+if [ $# -gt 1 ]
+then
+	if [ "$1" != "update" -o "$2" != "-i" ]
+	then
+		show_usage
+		exit 1
+	fi
+fi
+
+case "$1" in
+
+	load)
+		if [ -f ${obj_path}/.config ]
+		then
+			echo "This will overwrite your existing kernel configuration!"
+			echo "Are you sure you want to do this? (y/[n])"
+			read yes_no
+			if [[ $yes_no != "y" ]]
+			then
+				echo "Canceling..."
+				exit 1
+			fi
+		fi
+		rm -f ${obj_path}/.config
+		make ${make_args} defconfig KBUILD_DEFCONFIG=ev3dev_defconfig
+		exit $?
+	;;
+	merge)
+		check_for_local_config
+		mv ${obj_path}/.config ${obj_path}/.config.old
+		make ${make_args} defconfig KBUILD_DEFCONFIG=ev3dev_defconfig
+		mv ${obj_path}/.config ${obj_path}/.config.new
+		mv ${obj_path}/.config.old ${obj_path}/.config
+		export file1=${obj_path}/.config.new
+		export file2=${obj_path}/.config
+		eval ${EV3DEV_MERGE_CMD}
+		rm -f ${obj_path}/.config.new
+	;;
+	update)
+		check_for_local_config
+		make ${make_args} savedefconfig || exit $?
+		if [ "$2" == "-i" ]
+		then
+			export file1=${obj_path}/defconfig
+			export file2=${kernel_src_path}/arch/arm/configs/ev3dev_defconfig
+			eval ${EV3DEV_MERGE_CMD}
+			rm -f $file1
+		else
+			mv ${obj_path}/defconfig ${kernel_src_path}/arch/arm/configs/ev3dev_defconfig
+		fi
+		exit $?
+	;;
+	*)
+		show_usage
+		exit 1
+	;;
+esac
+
+

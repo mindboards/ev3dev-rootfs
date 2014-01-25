@@ -46,6 +46,7 @@ export AM1808_ABI="${EV3DEV_AM1808_ABI}"
 export AM1808_OBJ="${AM1808_DISTRO}/obj"
 export AM1808_KERNEL="${AM1808_DISTRO}/${AM1808_LINUX}"
 export AM1808_INSTALL="${AM1808_DISTRO}/dist"
+export EV3DEV_MERGE_CMD="vimdiff \$file1 \$file2"
 
 #export AM1808_MODULES=~/projects/lms2012/lms2012/Linux_AM1808/sys/mod
 

@@ -9,6 +9,7 @@ ev3dev-rootfs
 These are the scripts used to compile the ev3dev kernel and build the root
 file system.
 
+
 System Requirements
 -------------------
 * Debian or derivative OS (Ubuntu, Mint, etc.)
@@ -19,14 +20,14 @@ Scripts
 
 ```build-kernel```               Used to build the kernel.
 
+```defconfig```                  Used to manage the ev3dev_defconfig file and
+                                 your current local configuration.
+
 ```install-kernel-build-tools``` Installs the prerequisite tools required
                                  to build the kernel.
 
 ```menuconfig```                 Runs the menu configuration tool for the
                                  kernel configuration.
-
-```update-defconfig```           Updates the ev3dev_defconfig file with the
-                                 current configuration.
 
 
 First time kernel build
@@ -102,8 +103,40 @@ It should look like this:
     
     # override any AM1808_* variables from setup-env script.
     #export AM1808_XXX=/custom/path
+    #export EV3DEV_MERGE_CMD="kdiff3 \$file1 \$file2"
+    #export EV3DEV_MERGE_CMD="meld \$file1 \$file2"
 
 The ```-j4``` is for faster builds. It allows make to compile files in
 in parallel. You should replace 4 with the number of processor cores that
 you want to devote to building the kernel.
+
+
+Managing the Kernel Configuration
+---------------------------------
+
+When you run ```./build-kernel``` if no existing kernel configuration exists
+the default configuration is loaded from ```arch/arm/configs/ev3dev_defconfig```.
+
+If you make changes to your local kernel configuration that you want to merge
+into the default configuration, run ```./defconfig update```. If you want to
+selectively merge changes, run ```./defconfig update -i``` which will open the
+merge tool specified by the EV3DEV_MERGE_CMD environment variable.
+
+If you have an existing kernel configuration, you will want to check for changes
+to the default configuration each time you merge or checkout a branch. You can
+call ```./defconfig load``` to wipe out your local configuration and load the
+default configuration or you can call ```./defconfig merge``` to merge the
+default configuration into your existing local configuration.
+
+If you are forgetful or lazy or just want this to happen automatically, you can
+set up hooks in your git repo. For example, you could save the following file as
+both ```.git/hooks/post-merge``` and ```.git/hooks/post-checkout``` and you will
+be prompted to merge the default configuration into your local configuration
+whenever you merge or checkout a branch. In you followed the tutorial above,
+```<path-to-ev3dev-rootfs-repo>`` would be ```~/work/ev3dev-rootfs```.
+
+    #!/bin/sh
+    
+    <path-to-ev3dev-rootfs-repo>/defconfig merge
+
 
