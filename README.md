@@ -140,3 +140,57 @@ whenever you merge or checkout a branch. In you followed the tutorial above,
     <path-to-ev3dev-rootfs-repo>/defconfig merge
 
 
+Sharing Your Kernel
+-------------------
+
+Want to send your custom kernel to someone so that they can use it? Never fear,
+there is an easy way to do that - using Debian packaging.
+
+First, we need to change a couple kernel options to add some version info so
+that our friends will know what kernel they are running. Run ```./menuconfig```
+and set the following options:
+
+    General setup --->
+      (-your-name) Local version - append to kernel release
+      [*] Automatically append version information to the version string
+
+Make sure to include the '-' prefix in ```-your-name``` on the _Local version_.
+And, of course, substitute something like your github user name for _your-name_.
+Also, I don't recommend leaving the second option enabled during regular
+development, otherwise every time you make a commit, you will have to reload the
+kernel on your EV3 even if you only made changes to modules.
+
+Now, make sure that your git repo is clean (or your kernel version will say
+_dirty_).
+
+    ~/work/ev3dev-kernel $ git status
+    # On branch awesomeness
+    nothing to commit, working directory clean
+
+Then, we build a Debian package (with a crazy huge file name).
+
+    ~/work/ev3dev-rootfs $ ./build-kernel deb-pkg KDEB_PACKAGEVERSION=1
+    ...
+    <lots-of-build-output>
+    ...
+    ~/work/ev3dev-rootfs $ ls ../*.deb
+    ../linux-headers-3.3.0-ev3dev-00.01.02-your-name-g04254fb_1_armel.deb
+    ../linux-image-3.3.0-ev3dev-00.01.02-your-name-g04254fb_1_armel.deb
+    ../linux-libc-dev_1_armel.deb
+
+Now, send the ```linux-image-*``` file to your friend with these instructions:
+
+* Copy the ```.deb``` file to your EV3
+* Install the package
+* Overwrite the existing uImage file on the FAT partition with the new one
+* Reboot the EV3
+
+Example:
+
+    user@host ~ $ scp linux-image-*.deb root@ev3dev:/tmp
+    user@host ~ $ ssh root@ev3dev
+    root@ev3dev:~# dpkg --install /tmp/linux-image-*.deb
+    root@ev3dev:~# cp /boot/uImage-3.3.0-ev3dev-00.01.02-your-name-g04254fb /media/mmc_p1/uImage 
+    root@ev3dev:~# reboot
+
+
