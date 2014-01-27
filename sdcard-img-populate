@@ -106,29 +106,31 @@ mkdir ev3dev-ext3/media/mmc_p1
 
 echo    "done."
 
-echo    "-------------------------------------------------------------------------------"
-echo -n "   Filling unused sectors on FAT32 partition with zeros ... "
+if ! type zerofree; then
+    echo    "-------------------------------------------------------------------------------"
+    echo -n "   Filling unused sectors on ext3 partition with zeros ... "
 
-dd if=/dev/zero of=ev3dev-fat32/zero.fill > /dev/null 2>&1
-sleep 3
-rm ev3dev-fat32/zero.fill
+    dd if=/dev/zero of=ev3dev-ext3/zero.fill > /dev/null 2>&1
+    sleep 3
+    rm ev3dev-ext3/zero.fill
 
-echo    "done."
-
-echo    "-------------------------------------------------------------------------------"
-echo -n "   Filling unused sectors on ext3 partition with zeros ... "
-
-dd if=/dev/zero of=ev3dev-ext3/zero.fill > /dev/null 2>&1
-sleep 3
-rm ev3dev-ext3/zero.fill
-
-echo    "done."
+    echo    "done."
+fi
 
 echo    "-------------------------------------------------------------------------------"
 echo    "   Unmounting ev3dev.img partitions ... "
 
 eval umount "/dev/mapper/loop?-ev3dev-1" > /dev/null 2>&1
 eval umount "/dev/mapper/loop?-ev3dev-2" > /dev/null 2>&1 
+
+if type zerofree; then
+    echo    "-------------------------------------------------------------------------------"
+    echo -n "   Filling unused sectors on ext3 partition with zeros ... "
+
+    zerofree /dev/mapper/loop?-ev3dev-2
+    
+    echo    "done."
+fi
 
 echo    "-------------------------------------------------------------------------------"
 echo    "   Unmapping partitions from ev3dev.img ... "
