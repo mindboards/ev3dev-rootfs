@@ -110,7 +110,7 @@ echo    "-----------------------------------------------------------------------
 echo -n "   Filling unused sectors on FAT32 partition with zeros ... "
 
 dd if=/dev/zero of=ev3dev-fat32/zero.fill > /dev/null 2>&1
-sleep 3
+sync
 rm ev3dev-fat32/zero.fill
 
 echo    "done."
@@ -119,7 +119,7 @@ echo    "-----------------------------------------------------------------------
 echo -n "   Filling unused sectors on ext3 partition with zeros ... "
 
 dd if=/dev/zero of=ev3dev-ext3/zero.fill > /dev/null 2>&1
-sleep 3
+sync
 rm ev3dev-ext3/zero.fill
 
 echo    "done."
