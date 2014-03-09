@@ -134,7 +134,7 @@ if [ "${YesNo}" = "Yes" ]; then
     echo    "done"
 fi
 
-sleep 5
+sync
 
 echo    "-------------------------------------------------------------------------------"
 echo    "   Unmapping partitions from ev3dev.img ... "
