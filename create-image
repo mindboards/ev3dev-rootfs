@@ -1,7 +1,24 @@
 #!/bin/sh -e
-echo $PATH
+
+if [ $# -gt 0 ]; then
+	echo "usage: ./create-image"
+	echo
+	echo "ENVIRONMENT VARIABLES"
+	echo "---------------------"
+	echo "DEBIAN_MIRROR    URL for debian package repository"
+	echo "                 default: http://ftp.debian.org/debian"
+	echo "EV3DEV_MIRROR    URL for ev3dev package repository"
+	echo "                 default: http://ppa.lechnology.com/ev3dev"
+	echo "IMAGE_SIZE       Size(s) of image files to create"
+	echo "                 default: 1G 2G 4G 8G"
+	exit 0
+fi
+
 if [ ! -z $DEBIAN_MIRROR ]; then
 	DEBIAN_MIRROR="-m $DEBIAN_MIRROR"
+fi
+if [ -z $IMAGE_SIZE ]; then
+	IMAGE_SIZE="1G 2G 4G 8G"
 fi
 
 polystrap -d ev3dev-rootfs $DEBIAN_MIRROR ev3dev
@@ -19,7 +36,16 @@ mv /uInitrd /media/mmc_p1/ : \
 mv /boot.scr /media/mmc_p1/ : \
 mv /ev3dev.rc.local /media/mmc_p1/
 
-mv test1.img ev3dev.img
-zip -9 ev3dev.img.zip ev3dev.img
-cat ev3dev.img | xz -9 > ev3dev.img.xz
+# Hack to set the volume label on the vfat partition since guestfish does not know how
+# volume name must be null padded to exactly 11 bytes
+echo -e "EV3_BOOT\0\0\0" | dd of=test1.img bs=1 seek=32811 count=11 conv=notrunc
 
+for size in $IMAGE_SIZE
+do
+	truncate -r test1.img ev3dev.$size.img
+	truncate -s $size ev3dev.$size.img
+	virt-resize --expand /dev/sda2 test1.img ev3dev.$size.img
+	zip -9 ev3dev.$size.img.zip ev3dev.$size.img
+	cat ev3dev.$size.img | xz -9 > ev3dev.$size.img.xz
+	rm -f ev3dev.$size.img
+done
