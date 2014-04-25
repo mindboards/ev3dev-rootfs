@@ -169,7 +169,7 @@ _dirty_).
 
 Then, we build a Debian package (with a crazy huge file name).
 
-    ~/work/ev3dev-rootfs $ ./build-kernel deb-pkg KDEB_PACKAGEVERSION=1
+    ~/work/ev3dev-rootfs $ ./build-kernel deb-pkg KDEB_PKGVERSION=1
     ...
     <lots-of-build-output>
     ...
